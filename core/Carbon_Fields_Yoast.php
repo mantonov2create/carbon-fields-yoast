@@ -18,6 +18,7 @@ class Carbon_Fields_Yoast {
 		require_once dirname(__DIR__) . '/config.php';
 
 		add_action( 'admin_print_footer_scripts', array( $this, 'enqueue_assets' ), 8 );
+		add_action( 'carbon_fields_register_fields', array( $this, 'attach_theme_options' ), 8 );
 	}
 
 	/**
@@ -37,5 +38,15 @@ class Carbon_Fields_Yoast {
 			\Carbon_Fields_Yoast\VERSION,
 			true
 		);
+
+		if ( ! empty( $content_class = carbon_get_theme_option( 'crb_yoast_content_class' ) ) ) {
+			wp_localize_script( 'carbon-fields-yoast', 'crbnyoast', array(
+				'class' => $content_class,
+			) );
+		}
+	}
+
+	public function attach_theme_options() {
+		include_once( \Carbon_Fields_Yoast\DIR . '/options/theme-options.php' );
 	}
 }
